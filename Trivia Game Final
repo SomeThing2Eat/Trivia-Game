@@ -1,0 +1,353 @@
+import java.util.InputMismatchException; // Importing the InputMismatchException for handling input errors
+import java.util.Scanner; // Importing Scanner for taking input from the user
+
+public class Final {
+    static Scanner console = new Scanner(System.in); // Creating a Scanner object for user input
+    static int minus_points = 0, plus_points = 0; // Variables to track the user's score
+    static int picked_choice; // Variable to store the user's trivia category choice
+    static int confirmed_1; // Variable to store the confirmation input
+    static boolean askAgain_playTrivia = true; // Create to determine if the user wants to continue playing trivia
+
+    public static void main(String[] args) {
+        boolean askAgain_main = true; // Flag for the main menu loop
+        while (askAgain_main) {
+            try {
+                // Main menu options
+                System.out.println("Welcome to Trivia");
+                System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+                System.out.println("Enter 1 to PLAY");
+                System.out.println("Enter 2 to learn HOW TO PLAY");
+                System.out.println("Enter 3 to QUIT");
+                System.out.println("Total Score = " + (plus_points - minus_points)); // Displaying the total score
+                System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+
+                // Taking in the user's choice from the main menu
+                int beginning_choice = console.nextInt();
+
+                switch (beginning_choice) {
+                    case 1:
+                        playTrivia(); // Method call to start the trivia game
+                        askAgain_main = askToPlayAgain(); // Asking if the user wants to play again
+                        break;
+                    case 2: // Displaying instructions
+                        System.out.println("How to Play: Choose a trivia topic and answer questions. Earn points for correct answers and lose points for incorrect ones.");
+                        askAgain_main = askToPlayAgain(); // Asking if the user wants to go back to the menu
+                        break;
+                    case 3:
+                        System.out.println("Thank You For Playing!"); // Ending the game
+                        askAgain_main = false; // Exiting the main loop
+                        break;
+                    default:
+                        System.out.println("Invalid input. Please enter a valid choice."); // Handling invalid input
+                }
+            } catch (InputMismatchException e) {
+                System.err.println("Invalid Input, returning to main menu."); // Handling input mismatch
+                console.nextLine(); // Clearing invalid input
+            }
+        }
+    }
+
+    public static void playTrivia() {
+        askAgain_playTrivia = true; // Resetting the trivia play flag
+        while (askAgain_playTrivia) {
+            try {
+                // Prompting the user to choose a trivia category
+                System.out.println("Pick Your Trivia:");
+                System.out.println("1 : Countries");
+                System.out.println("2 : Olympics");
+                System.out.println("3 : History");
+                picked_choice = console.nextInt(); // Storing the user's choice
+                switch (picked_choice) {
+                    case 1:
+                        System.out.println("Countries Trivia: Test your knowledge about the world’s nations, including geography, flags, and global cultures.");
+                        check_if_1(); // Confirmation step
+                        questions(); // Method to ask questions
+                        break;
+                    case 2:
+                        System.out.println("Olympics Trivia: Dive into the rich history and memorable events of the Olympic Games, from legendary athletes to historic moments.");
+                        check_if_1(); // Confirmation step
+                        questions(); // Method to ask questions
+                        break;
+                    case 3:
+                        System.out.println("History Trivia: Explore significant historical events, influential figures, and turning points that shaped the world as we know it.");
+                        check_if_1(); // Confirmation step
+                        questions(); // Method to ask questions
+                        break;
+                    default:
+                        System.out.println("Invalid Input Try Again"); // Handling invalid input
+                }
+            } catch (InputMismatchException e) {
+                System.err.println("Invalid Input, returning to choice board."); // Handling input mismatch
+                console.nextLine(); // Clearing invalid input
+            }
+        }
+    }
+
+    public static void check_if_1() {
+        boolean askAgainCheck_if_1 = true; // Create variable for confirmation loop
+        while (askAgainCheck_if_1) {
+            try {
+                System.out.println("Enter 1 to continue"); // Prompt for confirmation
+                confirmed_1 = console.nextInt(); // Taking confirmation input
+                if (confirmed_1 == 1) {
+                    System.out.println("Processing..."); // Confirmation message
+                    askAgainCheck_if_1 = false; // Exit the confirmation loop
+                    askAgain_playTrivia = false; // Exit the trivia play loop
+                } else {
+                    System.out.println("Go Again"); // Handling incorrect confirmation input
+                }
+            } catch (InputMismatchException e) {
+                System.err.println("Invalid Input"); // Handling input mismatch
+                console.nextLine(); // Clearing invalid input
+            }
+        }
+    }
+
+    // Method to check if the user's answer is correct
+    public static void checkAnswer(int userAnswer, int correctAnswer) {
+        if (userAnswer == correctAnswer) {
+            System.out.println("That was the correct answer! You gained a point :)");
+            plus_points++; // Incrementing the score for a correct answer
+        } else {
+            System.out.println("That was the wrong answer. You lost a point :(");
+            wrongAns();
+            minus_points++; // Incrementing the penalty for an incorrect answer
+        }
+    }
+
+    public static void questions() {
+        boolean validInput; // Flag for input validation
+
+        switch (picked_choice) {
+            case 1: // Countries Trivia
+                do {
+                    try {
+                        // Question 1
+                        System.out.println("Question: Which country has the largest population in the world?");
+                        System.out.println("1 : India");
+                        System.out.println("2 : USA");
+                        System.out.println("3 : China");
+                        int country_ans1 = console.nextInt(); // Taking answer input
+
+                        if (country_ans1 < 1 || country_ans1 > 3) { // Validating input range
+                            throw new InputMismatchException();
+
+                        }
+                        checkAnswer(country_ans1, 1); // Checking answer (correct: China)
+                        check_if_1(); // Confirmation step
+                        validInput = true; // Valid input flag
+                    } catch (InputMismatchException e) {
+                        System.err.println("Invalid input. Please enter a valid option (1, 2, or 3)."); // Handling invalid input
+                        console.nextLine(); // Clearing invalid input
+                        validInput = false; // Invalid input flag
+                    }
+                } while (!validInput); // Repeat if input is invalid
+
+                // Question 2
+                do {
+                    try {
+                        System.out.println("Question: Which country is known as the Land of The Rising Sun?");
+                        System.out.println("1 : Japan");
+                        System.out.println("2 : South Korea");
+                        System.out.println("3 : Thailand");
+                        int country_ans2 = console.nextInt();
+
+                        if (country_ans2 < 1 || country_ans2 > 3) {
+                            throw new InputMismatchException();
+                        }
+                        checkAnswer(country_ans2, 1); // Checking answer (correct: Japan)
+                        check_if_1(); // Confirmation step
+                        validInput = true;
+                    } catch (InputMismatchException e) {
+                        System.err.println("Invalid input. Please enter a valid option (1, 2, or 3).");
+                        console.nextLine();
+                        validInput = false;
+                    }
+                } while (!validInput);
+
+                // Question 3
+                do {
+                    try {
+                        System.out.println("Question: What is the capital of Australia?");
+                        System.out.println("1 : Sydney");
+                        System.out.println("2 : Canberra");
+                        System.out.println("3 : Melbourne");
+                        int country_ans3 = console.nextInt();
+
+                        if (country_ans3 < 1 || country_ans3 > 3) {
+                            throw new InputMismatchException();
+                        }
+                        checkAnswer(country_ans3, 2); // Checking answer (correct: Canberra)
+                        check_if_1(); // Confirmation step
+                        validInput = true;
+                    } catch (InputMismatchException e) {
+                        System.err.println("Invalid input. Please enter a valid option (1, 2, or 3).");
+                        console.nextLine();
+                        validInput = false;
+                    }
+                } while (!validInput);
+                break;
+
+            case 2: // Olympics Trivia
+                do {
+                    try {
+                        System.out.println("Question: Which country has won the most Olympic gold medals in history?");
+                        System.out.println("1 : Russia");
+                        System.out.println("2 : USA");
+                        System.out.println("3 : China");
+                        int olympic_ans1 = console.nextInt();
+
+                        if (olympic_ans1 < 1 || olympic_ans1 > 3) {
+                            throw new InputMismatchException();
+                        }
+                        checkAnswer(olympic_ans1, 2); // Checking answer (correct: USA)
+                        check_if_1(); // Confirmation step
+                        validInput = true;
+                    } catch (InputMismatchException e) {
+                        System.err.println("Invalid input. Please enter a valid option (1, 2, or 3).");
+                        console.nextLine();
+                        validInput = false;
+                    }
+                } while (!validInput);
+
+                do {
+                    try {
+                        System.out.println("Question: In which year were the first modern Olympic Games held?");
+                        System.out.println("1 : 1900");
+                        System.out.println("2 : 1896");
+                        System.out.println("3 : 1912");
+                        int olympic_ans2 = console.nextInt();
+
+                        if (olympic_ans2 < 1 || olympic_ans2 > 3) {
+                            throw new InputMismatchException();
+                        }
+                        checkAnswer(olympic_ans2, 2); // Checking answer (correct: 1896)
+                        check_if_1(); // Confirmation step
+                        validInput = true;
+                    } catch (InputMismatchException e) {
+                        System.err.println("Invalid input. Please enter a valid option (1, 2, or 3).");
+                        console.nextLine();
+                        validInput = false;
+                    }
+                } while (!validInput);
+
+                do {
+                    try {
+                        System.out.println("Question: Where were the 2016 Summer Olympics held?");
+                        System.out.println("1 : London");
+                        System.out.println("2 : Tokyo");
+                        System.out.println("3 : Rio De Janeiro");
+                        int olympic_ans3 = console.nextInt();
+
+                        if (olympic_ans3 < 1 || olympic_ans3 > 3) {
+                            throw new InputMismatchException();
+                        }
+                        checkAnswer(olympic_ans3, 3); // Checking answer (correct: Rio De Janeiro)
+                        check_if_1(); // Confirmation step
+                        validInput = true;
+                    } catch (InputMismatchException e) {
+                        System.err.println("Invalid input. Please enter a valid option (1, 2, or 3).");
+                        console.nextLine();
+                        validInput = false;
+                    }
+                } while (!validInput);
+                break;
+
+            case 3: // History Trivia
+                do {
+                    try {
+                        System.out.println("Question: Who was the first President of the United States?");
+                        System.out.println("1 : George Washington");
+                        System.out.println("2 : Thomas Jefferson");
+                        System.out.println("3 : Abraham Lincoln");
+                        int history_ans1 = console.nextInt();
+
+                        if (history_ans1 < 1 || history_ans1 > 3) {
+                            throw new InputMismatchException();
+                        }
+                        checkAnswer(history_ans1, 1); // Checking answer (correct: George Washington)
+                        check_if_1(); // Confirmation step
+                        validInput = true;
+                    } catch (InputMismatchException e) {
+                        System.err.println("Invalid input. Please enter a valid option (1, 2, or 3).");
+                        console.nextLine();
+                        validInput = false;
+                    }
+                } while (!validInput);
+
+                do {
+                    try {
+                        System.out.println("Question: In which year did World War II end?");
+                        System.out.println("1 : 1845");
+                        System.out.println("2 : 1912");
+                        System.out.println("3 : 1945");
+                        int history_ans2 = console.nextInt();
+
+                        if (history_ans2 < 1 || history_ans2 > 3) {
+                            throw new InputMismatchException();
+                        }
+                        checkAnswer(history_ans2, 3); // Checking answer (correct: 1945)
+                        check_if_1(); // Confirmation step
+                        validInput = true;
+                    } catch (InputMismatchException e) {
+                        System.err.println("Invalid input. Please enter a valid option (1, 2, or 3).");
+                        console.nextLine();
+                        validInput = false;
+                    }
+                } while (!validInput);
+
+                do {
+                    try {
+                        System.out.println("Question: Which empire was ruled by Julius Caesar?");
+                        System.out.println("1 : Greek Empire");
+                        System.out.println("2 : Roman Empire");
+                        System.out.println("3 : Ottoman Empire");
+                        int history_ans3 = console.nextInt();
+
+                        if (history_ans3 < 1 || history_ans3 > 3) {
+                            throw new InputMismatchException();
+                        }
+                        checkAnswer(history_ans3, 2); // Checking answer (correct: Roman Empire)
+                        check_if_1(); // Confirmation step
+                        validInput = true;
+                    } catch (InputMismatchException e) {
+                        System.err.println("Invalid input. Please enter a valid option (1, 2, or 3).");
+                        console.nextLine();
+                        validInput = false;
+                    }
+                } while (!validInput);
+                break;
+        }
+    }
+
+    // Method to ask the user if they want to play again or quit
+    public static boolean askToPlayAgain() {
+        try {
+            System.out.println("Would you like to go back to the main menu or quit?");
+            System.out.println("Enter 1 to go back to the menu, or 2 to quit.");
+            int choice = console.nextInt();
+            return choice == 1; // Returning true if user wants to go back to menu
+        } catch (InputMismatchException e) {
+            System.err.println("Invalid Input. Exiting the game."); // Handling input mismatch
+            console.nextLine(); // Clearing invalid input
+            return false; // Returning false to exit the game
+        }
+    }
+
+    public static void wrongAns(){
+        int size = 7;  // Adjust this to change the size of the X pattern, must be odd for a centered X
+
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
+                // Print '*' at the positions that form an 'X'
+                if (j == i || j == size - i - 1) {
+                    System.out.print("*");
+                } else {
+                    System.out.print(" ");
+                }
+            }
+            System.out.println(); // Move to the next line after each row
+        }
+    }
+
+}
